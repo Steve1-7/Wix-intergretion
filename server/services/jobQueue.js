@@ -2,10 +2,29 @@ import Queue from 'bull';
 import { logger } from '../utils/logger.js';
 import { syncEngine } from './syncEngine.js';
 
+// Use Upstash Redis REST API or fallback to standard Redis
+const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
+// Determine which Redis connection to use
+let redisConfig;
+if (UPSTASH_REDIS_REST_URL && UPSTASH_REDIS_REST_TOKEN) {
+  // Use Upstash Redis REST API
+  redisConfig = {
+    host: UPSTASH_REDIS_REST_URL,
+    password: UPSTASH_REDIS_REST_TOKEN,
+    tls: {}, // Upstash requires TLS
+  };
+  logger.info('jobQueue', 'Using Upstash Redis REST API');
+} else {
+  // Use standard Redis URL
+  redisConfig = REDIS_URL;
+  logger.info('jobQueue', 'Using standard Redis URL');
+}
+
 // Create job queues
-export const syncQueue = new Queue('sync-jobs', REDIS_URL, {
+export const syncQueue = new Queue('sync-jobs', redisConfig, {
   defaultJobOptions: {
     attempts: 3,
     backoff: {
@@ -17,7 +36,7 @@ export const syncQueue = new Queue('sync-jobs', REDIS_URL, {
   },
 });
 
-export const webhookQueue = new Queue('webhook-jobs', REDIS_URL, {
+export const webhookQueue = new Queue('webhook-jobs', redisConfig, {
   defaultJobOptions: {
     attempts: 5,
     backoff: {
