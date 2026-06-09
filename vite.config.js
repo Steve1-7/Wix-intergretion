@@ -6,7 +6,7 @@ export default defineConfig({
   root: 'client',
   publicDir: '../public',
   build: {
-    outDir: '../server/public',
+    outDir: '../public',
   },
   server: {
     port: 5173,
