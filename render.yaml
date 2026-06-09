@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: wix-hubspot-integration-server
+    env: node
+    plan: starter
+    branch: main
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true

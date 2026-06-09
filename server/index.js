@@ -2,6 +2,9 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import rateLimit from 'express-rate-limit';
 import { validateEnv } from './utils/envValidator.js';
 import { errorHandler } from './utils/errors.js';
@@ -61,6 +64,16 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/gdpr', gdprRoutes);
 app.use('/health', healthRoutes);
+
+// Serve built client in production if available
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const clientDist = path.join(__dirname, 'public');
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(clientDist, 'index.html'));
+  });
+}
 
 app.get('/api/health', (req, res) => {
   res.json({

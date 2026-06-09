@@ -9,7 +9,9 @@ export function useApi(url, options = {}) {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(url, options);
+      const base = (import.meta && import.meta.env && import.meta.env.VITE_API_BASE) ? import.meta.env.VITE_API_BASE : '';
+      const target = url.startsWith('/') ? `${base}${url}` : url;
+      const res = await fetch(target, options);
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.error?.message || `Request failed: ${res.status}`);
