@@ -1,0 +1,183 @@
+{
+  "app_id": "wix-hubspot-integration",
+  "name": {
+    "en": "HubSpot Integration for Wix"
+  },
+  "description": {
+    "en": "Securely connect your Wix site to HubSpot CRM. Bi-directional contact synchronization, form capture with UTM attribution, and field mapping dashboard."
+  },
+  "version": "1.0.0",
+  "author": {
+    "name": "Your Company",
+    "email": "support@yourcompany.com",
+    "website": "https://yourcompany.com"
+  },
+  "permissions": {
+    "site": {
+      "read": [
+        "contacts",
+        "forms"
+      ],
+      "write": [
+        "contacts"
+      ]
+    }
+  },
+  "widgets": {
+    "dashboard": {
+      "component": "DashboardWidget",
+      "description": "Monitor sync status, view statistics, and manage your HubSpot integration",
+      "defaultWidth": 12,
+      "defaultHeight": 6
+    },
+    "settings": {
+      "component": "SettingsWidget",
+      "description": "Configure field mappings, sync settings, and connection preferences",
+      "defaultWidth": 12,
+      "defaultHeight": 8
+    }
+  },
+  "endpoints": {
+    "oauth": {
+      "connect": "/api/oauth/connect",
+      "callback": "/api/oauth/callback",
+      "disconnect": "/api/oauth/disconnect"
+    },
+    "webhooks": {
+      "hubspot": "/api/webhooks/hubspot",
+      "wix": "/api/webhooks/wix"
+    },
+    "api": {
+      "base_url": "/api",
+      "endpoints": {
+        "mappings": "/mappings",
+        "sync": "/sync",
+        "forms": "/forms",
+        "settings": "/settings",
+        "dashboard": "/dashboard"
+      }
+    }
+  },
+  "settings": {
+    "default": {
+      "conflict_resolution_strategy": "last_updated_wins",
+      "sync_enabled": true,
+      "wix_to_hubspot_enabled": true,
+      "hubspot_to_wix_enabled": true,
+      "deduplication_window_seconds": 300,
+      "max_concurrent_syncs": 10,
+      "retry_delay_seconds": 60
+    },
+    "schema": {
+      "conflict_resolution_strategy": {
+        "type": "enum",
+        "options": ["last_updated_wins", "wix_wins", "hubspot_wins"],
+        "default": "last_updated_wins"
+      },
+      "sync_enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "wix_to_hubspot_enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "hubspot_to_wix_enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "deduplication_window_seconds": {
+        "type": "integer",
+        "min": 60,
+        "max": 3600,
+        "default": 300
+      },
+      "max_concurrent_syncs": {
+        "type": "integer",
+        "min": 1,
+        "max": 50,
+        "default": 10
+      },
+      "retry_delay_seconds": {
+        "type": "integer",
+        "min": 10,
+        "max": 300,
+        "default": 60
+      }
+    }
+  },
+  "features": {
+    "oauth": {
+      "provider": "hubspot",
+      "scopes": [
+        "crm.objects.contacts.read",
+        "crm.objects.contacts.write",
+        "crm.schemas.contacts.read",
+        "forms",
+        "oauth"
+      ]
+    },
+    "sync": {
+      "bidirectional": true,
+      "realtime": true,
+      "field_mapping": true,
+      "conflict_resolution": true,
+      "deduplication": true,
+      "retry_logic": true
+    },
+    "forms": {
+      "wix_to_hubspot": true,
+      "utm_tracking": true,
+      "attribution": true,
+      "hubspot_forms_embed": true
+    },
+    "monitoring": {
+      "sync_events": true,
+      "statistics": true,
+      "error_tracking": true,
+      "dead_letter_queue": true
+    }
+  },
+  "pricing": {
+    "free": {
+      "syncs_per_month": 1000,
+      "contacts": 100,
+      "features": ["basic_sync", "field_mapping", "form_capture"]
+    },
+    "pro": {
+      "syncs_per_month": 10000,
+      "contacts": 1000,
+      "features": ["all_features", "priority_support", "custom_fields"]
+    },
+    "enterprise": {
+      "syncs_per_month": "unlimited",
+      "contacts": "unlimited",
+      "features": ["all_features", "dedicated_support", "custom_integration", "sla"]
+    }
+  },
+  "support": {
+    "email": "support@yourcompany.com",
+    "documentation": "https://docs.yourcompany.com/wix-hubspot",
+    "status_page": "https://status.yourcompany.com"
+  },
+  "compliance": {
+    "gdpr": true,
+    "data_retention": {
+      "sync_events": "90_days",
+      "form_submissions": "365_days",
+      "dead_letter_queue": "30_days"
+    },
+    "data_export": true,
+    "right_to_delete": true
+  },
+  "marketplace": {
+    "category": "CRM",
+    "tags": ["hubspot", "crm", "sync", "contacts", "integration"],
+    "screenshots": [
+      "/assets/screenshots/dashboard.png",
+      "/assets/screenshots/mappings.png",
+      "/assets/screenshots/sync-monitor.png"
+    ],
+    "video_url": "https://www.youtube.com/watch?v=example"
+  }
+}
