@@ -30,6 +30,7 @@
     "joi": "^17.11.0",
     "node-fetch": "^3.3.2",
     "vite": "^5.0.0",
+    "serverless-http": "^3.0.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
